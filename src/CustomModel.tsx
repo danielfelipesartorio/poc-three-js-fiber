@@ -39,15 +39,22 @@ export default function CustomModel({ model, length, color, variation }: Props) 
     }
 
     const eyeMesh = variationRef.scene.clone();
+    eyeMesh.traverse((child) => {
+      if ((child as Mesh).isMesh) {
+        const mesh = child as Mesh;
+        if (mesh.material && 'color' in mesh.material) {
+          (mesh.material.color as any).set('#fff');
+        }
+      }
+    });
+    eyeMesh.scale.set(1 / length.x, 1 / length.y, 1 / length.z);
+
     socket.add(eyeMesh);
   };
 
   useEffect(() => {
     const fishObject = customModelRef.current;
     if (!fishObject) return;
-    model.modelNodes?.forEach(element => {
-      replaceEye(element);
-    });
 
     // Apply scale
     fishObject.scale.set(length.x, length.y, length.z);
@@ -61,6 +68,11 @@ export default function CustomModel({ model, length, color, variation }: Props) 
         }
       }
     });
+
+    model.modelNodes?.forEach(element => {
+      replaceEye(element);
+    });
+
 
 
   }, [model, length, color, variationRef.scene]);
