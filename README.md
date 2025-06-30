@@ -10,3 +10,5 @@ Para rodar basta:
 
     npm install
     npm run dev
+
+![poc 3d model](https://github.com/user-attachments/assets/24707512-7b1b-4930-8ea7-a2121dd2ec10)
