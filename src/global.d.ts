@@ -8,7 +8,11 @@ declare module 'react' {
       primitive: {
         object: Object3D;
         ref?: Ref<Object3D>;
-        [key: string]: any; // Allow other props like 'dispose', 'visible', etc.
+        [key: string]: any; 
+      };
+       group: {
+        ref?: Ref<Object3D>;
+        [key: string]: any; 
       };
     }
   }

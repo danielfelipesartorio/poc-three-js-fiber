@@ -66,7 +66,7 @@ export default function App() {
       <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }} >
         <div >
           <label>
-            Fish Length
+            Model Length
             <br />
             <input type="text" value={length.x} onChange={handleLengthChange('x')} />
             <input type="range" min="0.5" max="2" step="0.1" value={length.x} onChange={handleLengthChange('x')} />

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
-import { Group, Object3D, Mesh } from 'three';
+import { Group, Object3D, Mesh, Vector3 } from 'three';
 
 type Vec3 = {
   x: number;
@@ -28,18 +28,30 @@ export default function CustomModel({ model, length, color, variation }: Props) 
   const modelRef = useGLTF(model.modelUrl);
   const variationRef = useGLTF(variation ?? 'Cube.glb');
   const customModelRef = useRef<Group>(null);
+  const variationGroupRef = useRef<Group>(null);
 
-  const replaceEye = (name: string) => {
-    const modelObject = customModelRef.current;
-    if (!modelObject) return;
-    const socket: Object3D = modelObject.getObjectByName(name) || modelObject;
+  const replaceVariation = (name: string) => {
+    const modelScene = modelRef.scene;
+    const variationGroup = variationGroupRef.current;
+    if (!modelScene || !variationGroup) return;
 
-    while (socket.children.length > 0) {
-      socket.remove(socket.children[0]);
-    }
+    const node = modelScene.getObjectByName(name);
+    if (!node) return;
 
-    const eyeMesh = variationRef.scene.clone();
-    eyeMesh.traverse((child) => {
+    const existing = variationGroup.getObjectByName(name);
+    if (existing) variationGroup.remove(existing);
+
+    const variation = variationRef.scene.clone();
+    variation.name = name;
+
+    node.updateWorldMatrix(true, false);
+
+    node.getWorldPosition(variation.position);
+    node.getWorldQuaternion(variation.quaternion);
+
+    variation.scale.copy(node.scale);
+
+    variation.traverse((child) => {
       if ((child as Mesh).isMesh) {
         const mesh = child as Mesh;
         if (mesh.material && 'color' in mesh.material) {
@@ -47,20 +59,17 @@ export default function CustomModel({ model, length, color, variation }: Props) 
         }
       }
     });
-    eyeMesh.scale.set(1 / length.x, 1 / length.y, 1 / length.z);
 
-    socket.add(eyeMesh);
+    variationGroup.add(variation);
   };
 
+
   useEffect(() => {
-    const fishObject = customModelRef.current;
-    if (!fishObject) return;
+    if (!customModelRef.current || !variationGroupRef.current) return;
 
-    // Apply scale
-    fishObject.scale.set(length.x, length.y, length.z);
+    customModelRef.current.scale.set(length.x, length.y, length.z);
 
-    // Apply color to all meshes
-    fishObject.traverse((child) => {
+    customModelRef.current.traverse((child) => {
       if ((child as Mesh).isMesh) {
         const mesh = child as Mesh;
         if (mesh.material && 'color' in mesh.material) {
@@ -69,13 +78,13 @@ export default function CustomModel({ model, length, color, variation }: Props) 
       }
     });
 
-    model.modelNodes?.forEach(element => {
-      replaceEye(element);
-    });
-
-
-
+    model.modelNodes?.forEach(replaceVariation);
   }, [model, length, color, variationRef.scene]);
 
-  return <primitive ref={customModelRef} object={modelRef.scene} />;
+  return (
+    <>
+      <primitive ref={customModelRef} object={modelRef.scene} />
+      <group ref={variationGroupRef} />
+    </>
+  );
 }
