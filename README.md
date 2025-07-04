@@ -29,6 +29,10 @@ Se o arquivo que será usado for carregado via API, o recomendado é que se use 
 
 O arquivo dos modelos 3D a serem utilizados devem conter algumas configurações para permitir a customização adequada.
 
+### Configurações gerais
+
+Para uma experiencia mais fácil manipulando anexos e redimensionamentos, é imprescindível que o modelo se encontre na origem do espaço (coordenadas 0,0,0)
+
 ### Configuração de nodes
 
 Antes de gerar o arquivo .GLB, devem ser definidos os pontos de referencia que serão usados para posicionar os anexos ao modelo principal (ex: maçanetas em um armário).
