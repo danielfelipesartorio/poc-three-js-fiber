@@ -12,6 +12,10 @@ type Vec3 = {
 
 const modelList: ModelType[] = [
   {
+    name: "Natal",
+    modelUrl: 'NATAL (GLB).glb'
+  },
+  {
     name: 'Fish',
     modelUrl: '/fish/BarramundiFish.gltf',
     modelNodes: ['Eye_L', 'Eye_R'],
@@ -21,6 +25,7 @@ const modelList: ModelType[] = [
     name: 'Cube',
     modelUrl: 'Cube.glb',
   },
+
 ]
 
 export default function App() {
