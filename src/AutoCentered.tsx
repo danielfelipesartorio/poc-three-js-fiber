@@ -26,7 +26,10 @@ export default function AutoCentered({
         box.getSize(sizeVec);
 
         // Shift group to center it at origin
-        group.position.sub(center);
+        // modificação temporaria apenas para adequar ao modelo que nao esta na origem
+        if (Math.abs(center.z) > 2) {
+            group.position.sub(center);
+        }
 
         // Camera fit
         const maxDim = Math.max(sizeVec.x, sizeVec.y, sizeVec.z);
@@ -43,7 +46,7 @@ export default function AutoCentered({
         orthoCam.updateProjectionMatrix();
 
         // Move camera to isometric position and look at origin
-        orthoCam.position.set(5, 5, 5);
+        orthoCam.position.set(-5, 5, 5);
         orthoCam.lookAt(0, 0, 0);
     }, [camera, size, model]);
 

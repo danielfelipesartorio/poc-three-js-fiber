@@ -3,6 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, RandomizedLight, Bounds } from '@react-three/drei';
 import CustomModel, { ModelType } from './CustomModel';
 import AutoCentered from './AutoCentered';
+import { DirectionalLight } from 'three';
 
 type Vec3 = {
   x: number;
@@ -13,7 +14,9 @@ type Vec3 = {
 const modelList: ModelType[] = [
   {
     name: "Natal",
-    modelUrl: 'NATAL (GLB).glb'
+    modelUrl: 'NATAL (GLB).glb',
+    modelNodes: ['Eye_L', 'Eye_R'],
+    variation: [{ name: 'Cubo', url: 'Cube.glb' }, { name: 'Bola', url: 'ClearCoatCarPaint.glb' }]
   },
   {
     name: 'Fish',
@@ -25,7 +28,12 @@ const modelList: ModelType[] = [
     name: 'Cube',
     modelUrl: 'Cube.glb',
   },
-
+]
+const colorOptions = [
+  { name: 'Branco Neve', value: '#FFFFFF' },
+  { name: 'Cinza Claro', value: '#B0B0B0' },
+  { name: 'Bege Areia', value: '#D8CAB8' },
+  { name: 'Azul', value: '#5050AA' }
 ]
 
 export default function App() {
@@ -57,6 +65,7 @@ export default function App() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '95vh' }}>
+      {/* 
       <div style={{ width: '100%', backgroundColor: 'lightblue' }}>
         <label>
           Modelo
@@ -68,25 +77,36 @@ export default function App() {
           </select>
         </label>
       </div>
+       */}
       <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }} >
         <div >
           <label>
-            Model Length
+            Modificar dimensões
             <br />
             <input type="text" value={length.x} onChange={handleLengthChange('x')} />
-            <input type="range" min="0.5" max="2" step="0.1" value={length.x} onChange={handleLengthChange('x')} />
+            <input type="range" min="0.8" max="1.2" step="0.01" value={length.x} onChange={handleLengthChange('x')} />
             <br />
             <input type="text" value={length.y} onChange={handleLengthChange('y')} />
-            <input type="range" min="0.5" max="2" step="0.1" value={length.y} onChange={handleLengthChange('y')} />
-            <br />
-            <input type="text" value={length.z} onChange={handleLengthChange('z')} />
-            <input type="range" min="0.5" max="2" step="0.1" value={length.z} onChange={handleLengthChange('z')} />
+            <input type="range" min="0.8" max="1.2" step="0.01" value={length.y} onChange={handleLengthChange('y')} />
+            {/* <br />
+           <input type="text" value={length.z} onChange={handleLengthChange('z')} />
+            <input type="range" min="0.5" max="2" step="0.1" value={length.z} onChange={handleLengthChange('z')} /> */}
           </label>
           <br />
           <label>
             Cor
             <br />
             <input type="color" value={color} onChange={(e: ChangeEvent<HTMLInputElement>) => setColor(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Cores Predefinidas
+            <br />
+            <select value={color} onChange={e => setColor(e.target.value)}>
+              {colorOptions.map(i => {
+                return (<option key={i.name} value={i.value}>{i.name}</option>)
+              })}
+            </select>
           </label>
           <br />
           {
@@ -106,10 +126,10 @@ export default function App() {
         </div>
 
         <Canvas orthographic>
-          <RandomizedLight castShadow amount={8} frames={100} position={[5, 5, 5]} />
-          <RandomizedLight castShadow amount={8} frames={100} position={[-5, -5, -5]} />
+          <directionalLight position={[-5, -5, 5]} intensity={4} />
+          <directionalLight position={[5, 5, -5]} intensity={2} />
+          <directionalLight position={[-5, -5, -5]} intensity={1} />
           <Suspense fallback={null}>
-            <Environment preset="sunset" />
             <AutoCentered model={modelDetails}>
               <CustomModel model={modelDetails} length={length} color={color} variation={variation} />
             </AutoCentered>

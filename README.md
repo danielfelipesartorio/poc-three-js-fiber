@@ -48,3 +48,7 @@ Deve-se também se atentar que o ponto de referência deve condizer com o ponto 
 ### Configuração de malhas
 
 Além dos pontos de referência, deve-se separar as geometrias em grupos de malhas que serão das mesmas cores. Assim é possível ajustar o código que customiza a cor para aplicar a cor apenas as geometrias relevantes.
+
+### Configuração de texturas
+
+As texturas podem ser manipuladas na renderização, porem, como elas podem ter orientação e escala diferenciadas para cada textura, o ideal é que seja gerado um arquivo para cada textura, eliminando a necessidade de ter que ficar buscando arquivos de texturas no backend separado do modelo principal, e ter que ficar especificando rotação e escala para cada caso

@@ -14,6 +14,9 @@ declare module 'react' {
         ref?: Ref<Object3D>;
         [key: string]: any; 
       };
+      directionalLight:{
+         [key: string]: any; 
+      }
     }
   }
 }

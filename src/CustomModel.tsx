@@ -35,8 +35,13 @@ export default function CustomModel({ model, length, color, variation }: Props) 
     const variationGroup = variationGroupRef.current;
     if (!modelScene || !variationGroup) return;
 
-    const node = modelScene.getObjectByName(name);
-    if (!node) return;
+    let node = modelScene.getObjectByName(name);
+    console.log(node)
+    if (!node) {
+      node = new Object3D();
+      node.scale.set(0.05, 0.05, 0.05)
+      node.position.set(-0.05, 1, name === 'Eye_L' ? -49 : -48.3)
+    }
 
     const existing = variationGroup.getObjectByName(name);
     if (existing) variationGroup.remove(existing);
@@ -55,11 +60,10 @@ export default function CustomModel({ model, length, color, variation }: Props) 
       if ((child as Mesh).isMesh) {
         const mesh = child as Mesh;
         if (mesh.material && 'color' in mesh.material) {
-          (mesh.material.color as any).set('#fff');
+          (mesh.material.color as any).set('#EFBF04');
         }
       }
     });
-
     variationGroup.add(variation);
   };
 
